@@ -50,12 +50,28 @@
 	          		<h1 class="page-header">Dashboard</h1>
 	
 					<div class="row placeholders" ng-repeat="account in accounts">
-			        	{{account}}
+			        	<div class="panel panel-default" ng-click="selectAccount(account)">
+						 	<div class="panel-body" ng-class="account.selected ? 'bg-primary' : ''">
+						    	<h4>{{account.address}}</h4>
+					        	<div>
+					        		<h3>{{account.balance}} Ether</h3>
+					        	</div>
+						  	</div>
+						</div>
 			        </div>
 	
-		          	<h2 class="sub-header">Section title</h2>
+		          	<h2 class="sub-header">Send Transaction</h2>
 		          	<div class="table-responsive">
-		          		<table></table>  
+		          		<table class="table">
+		          			<tr>
+		          				<th>From:</th>
+		          				<th>To:</th>
+		          			</tr>
+		          			<tr>
+		          				<td><input class="form-control" ng-model="transactionFrom"></td>
+		          				<td><input class="form-control" ng-model="transactionTo"></td>
+		          			</tr>
+		          		</table>  
 		          	</div>
 	        	</div>
 	      	</div>
@@ -68,8 +84,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 <script src="js/lib/angular.js"></script>
 <script src="js/lib/angular-ui.js"></script>
-<script src="js/lib/require.js"></script>
-<script src="js/lib/web3/web3.js"></script>
+<!-- <script src="js/lib/require.js"></script> -->
+<script src="js/lib/web3/web3.min.js"></script>
 <script src="js/ethereum-service.js"></script>
 <script src="js/app.js"></script>
 </html>

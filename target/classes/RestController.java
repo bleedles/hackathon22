@@ -1,4 +1,4 @@
-package com.eth.web;
+
 
 @Controller
 public class RestController {
