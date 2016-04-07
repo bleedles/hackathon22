@@ -37,11 +37,6 @@
 		    		$scope.transactionFrom = account.address;
 		    		
 		    	}
-		    	if(account.address == "0xb89d174bb1326c0d91534efc0e027573d262b286") {
-		    		ethereum.web3.personal.unlockAccount(account.address, 'hashtagpassword');
-		    	} else if(account.address == "0xb499144ea883c5fcb1025c94d007b8aced55cd64") {
-		    		ethereum.web3.personal.unlockAccount(account.address, 'resp0nd!23');
-		    	}
 		    	$scope.accounts.push(account);
 	    	}
 	    }
