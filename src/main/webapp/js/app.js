@@ -1,9 +1,9 @@
 ;(function() {
-	var app = angular.module("app", ['ethereum-service']);
+	var app = angular.module("app", ['ethereum-service', 'accountService']);
 	
 	app.controller("AppController", AppController);
 	
-	function AppController($scope, ethereum) {
+	function AppController($scope, ethereum, accountInfo) {
 		$scope.users = ["Blake", "Connor", "Jon", "Afif"];
 		$scope.web3 = ethereum.web3;
 		$scope.selectAccount = selectAccount;
