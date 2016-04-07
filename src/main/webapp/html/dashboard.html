@@ -1,0 +1,33 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<h1 class="page-header">Dashboard</h1>
+	<div class="row placeholders" ng-repeat="account in accounts">
+      	<div class="panel panel-default" ng-click="selectAccount(account)">
+	 		<div class="panel-body" ng-class="account.selected ? 'bg-primary' : ''">
+	    		<h4>{{account.address}}</h4>
+        		<div>
+        			<h3>{{account.balance}} Ether</h3>
+        		</div>
+	  		</div>
+		</div>
+	</div>
+
+    <h2 class="sub-header">Send Transaction</h2>
+    <div class="table-responsive">
+      	<table class="table">
+      		<tr>
+      			<th>From:</th>
+      			<th>To:</th>
+      		</tr>
+      		<tr>
+      			<td><input class="form-control" ng-model="transactionFrom"></td>
+      			<td><input class="form-control" ng-model="transactionTo"></td>
+      		</tr>
+      	</table>
+	</div>
+    <div class="">
+    	<input type="number" class="form-control col-sm-9" ng-model="transactionAmount">
+    </div>
+   	<div class="">
+    	<button type="button" class="btn btn-primary" ng-click="sendTransaction()">Send Transaction</button>  
+    </div>
+</div>
