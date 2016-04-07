@@ -20,7 +20,7 @@
 	            		<span class="icon-bar"></span>
 	            		<span class="icon-bar"></span>
 	          		</button>
-	          		<a class="navbar-brand" href="#">EthWeb</a>
+	          		<a class="navbar-brand" href="#">CLASSic</a>
 	        	</div>
 	        	<div id="navbar" class="navbar-collapse collapse">
 		          	<ul class="nav navbar-nav navbar-right">
@@ -40,40 +40,12 @@
 	    	<div class="row">
 	        	<div class="col-sm-3 col-md-2 sidebar">
 		          	<ul class="nav nav-sidebar">
-		            	<li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-		            	<li><a href="#">Reports</a></li>
-		            	<li><a href="#">Analytics</a></li>
-		            	<li><a href="#">Export</a></li>
+		            	<li ng-class="activePage == 'dashboard' ? 'active' : ''"><a ng-click="activePage = 'dashboard'" href="">Dashboard <span class="sr-only">(current)</span></a></li>
+		            	<li ng-class="activePage == 'transactions' ? 'active' : ''"><a ng-click="activePage = 'transactions'" href="">Transactions</a></li>
 		          	</ul>
 	        	</div>
-	        	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          		<h1 class="page-header">Dashboard</h1>
-	
-					<div class="row placeholders" ng-repeat="account in accounts">
-			        	<div class="panel panel-default" ng-click="selectAccount(account)">
-						 	<div class="panel-body" ng-class="account.selected ? 'bg-primary' : ''">
-						    	<h4>{{account.address}}</h4>
-					        	<div>
-					        		<h3>{{account.balance}} Ether</h3>
-					        	</div>
-						  	</div>
-						</div>
-			        </div>
-	
-		          	<h2 class="sub-header">Send Transaction</h2>
-		          	<div class="table-responsive">
-		          		<table class="table">
-		          			<tr>
-		          				<th>From:</th>
-		          				<th>To:</th>
-		          			</tr>
-		          			<tr>
-		          				<td><input class="form-control" ng-model="transactionFrom"></td>
-		          				<td><input class="form-control" ng-model="transactionTo"></td>
-		          			</tr>
-		          		</table>  
-		          	</div>
-	        	</div>
+	        	<dashboard-view ng-show="activePage == 'dashboard'" src="'html/dashboard.html'"></dashboard-view>
+	        	<transactions-view ng-show="activePage == 'transactions'" src="'html/transactions.html'"></transactions-view>
 	      	</div>
 	    </div>
 	</div>
