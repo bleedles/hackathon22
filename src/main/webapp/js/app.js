@@ -1,6 +1,6 @@
 ;(function() {
-	var app = angular.module("app", ['ethereum-service', 'accountService', 'contractFactory']);
-	
+	var app = angular.module("app", ['ethereum-service', 'accountService', 'contractFactory', 'ui.bootstrap']);
+
 	app.controller("AppController", AppController);
 	app.directive('dashboardView', dashboardView);
 	app.directive('transactionsView', transactionsView);
@@ -10,7 +10,7 @@
 	    activate();
 	    $scope.contracts = contracts;
 	    $scope.users = 
-	    [{name:"blake",
+	    [{name:"Blake",
 	    classicCoins:0,
 	    customerKey: "518603",
     	accountBalanceData: 
@@ -162,7 +162,8 @@
 		$scope.selectAccount = selectAccount;
 		$scope.sendTransaction = sendTransaction;
 		$scope.activePage = 'dashboard';
-		
+		$scope.transactions = [{title: 'Send Money'},{title: 'Fund Me'},{title: 'Group Fund'}];
+		$scope.transactionToExecute = {};
 	    ///////////////////
 
 	    function activate() {
@@ -204,7 +205,8 @@
 	    	$scope.transactionSuccess = false;
 	    	$scope.transactionSuccess = ethereum.web3.eth.sendTransaction({
 	    		from:$scope.transactionFrom.trim(), 
-	    		to:$scope.transactionTo.trim(), 
+	    		to:$scope.transactionTo.trim(),
+	    		gas:0.25,
 	    		value:ethereum.web3.toWei($scope.transactionAmount, "ether")
 	    		});
 	    	return $scope.transactionSuccess;

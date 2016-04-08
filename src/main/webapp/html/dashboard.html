@@ -1,33 +1,85 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	<h1 class="page-header">Dashboard</h1>
-	<div class="row placeholders" ng-repeat="account in accounts">
-      	<div class="panel panel-default" ng-click="selectAccount(account)">
-	 		<div class="panel-body" ng-class="account.selected ? 'bg-primary' : ''">
-	    		<h4>{{account.address}}</h4>
-        		<div>
-        			<h3>{{account.balance}} Ether</h3>
-        		</div>
-	  		</div>
+	<div class="row placeholders" style="margin-left:10px;">
+		<div class="input-group input-group-sm">
+			<select class="form-control col-md-10" ng-model="selectedTransaction" ng-options="transaction.title for transaction in transactions">
+				<option value="">Initiate Transaction</option>
+			</select>
+      	</div>
+	</div>
+	<h2 class="sub-header">{{selectedTransaction.title}}</h2>
+	<div class="row" ng-show="selectedTransaction.title == 'Fund Me'" style="margin-left:10px;">
+		<div class="input-group input-group-sm">
+			<form name="FundMe">
+				<div class="form-group">
+			    	<label for="title">Title</label>
+			   		<input type="text" ng-model="transactionToExecute.title" class="form-control" id="title" placeholder="Title">
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Target Amount</label>
+			   		<div class="input-group">
+				      	<div class="input-group-addon">$</div>
+				      	<input type="number" ng-model="transactionToExecute.targetAmount" class="form-control" id="targetAmount" placeholder="Amount">
+				    </div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Deadline</label>
+			   		<input type="number" ng-model="transactionToExecute.deadline" class="form-control" id="deadline" placeholder="Minutes">
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Contribution Amount</label>
+			   		<div class="input-group">
+				      	<div class="input-group-addon">$</div>
+				      	<input type="number" ng-model="transactionToExecute.contributionAmount" class="form-control" id="contributionAmount" placeholder="Amount">
+				    </div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Recipient of Funds</label>
+				    <input class="form-control" ng-model="transactionToExecute.recipient" uib-typeahead="user.name for user in users">
+			  	</div>
+			  	<button type="submit" class="btn btn-default" style="margin-top:10px;">Submit</button>
+			</form>
+      	</div>
+	</div>
+	
+	<div class="row" ng-show="selectedTransaction.title == 'Group Fund'" style="margin-left:10px;">
+		<div class="input-group input-group-sm">
+			<form name="GroupFund">
+				<div class="form-group">
+			    	<label for="title">Title</label>
+			   		<input type="text" ng-model="transactionToExecute.title" class="form-control" id="title" placeholder="Title">
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Deadline</label>
+			   		<input type="number" ng-model="transactionToExecute.deadline" class="form-control" id="deadline" placeholder="Minutes">
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Contribution Amount</label>
+			   		<div class="input-group">
+				      	<div class="input-group-addon">$</div>
+				      	<input type="number" ng-model="transactionToExecute.contributionAmount" class="form-control" id="contributionAmount" placeholder="Amount">
+				    </div>
+			  	</div>
+			  	<button type="submit" class="btn btn-default" style="margin-top:10px;">Submit</button>
+			</form>
 		</div>
 	</div>
-
-    <h2 class="sub-header">Send Transaction</h2>
-    <div class="table-responsive">
-      	<table class="table">
-      		<tr>
-      			<th>From:</th>
-      			<th>To:</th>
-      		</tr>
-      		<tr>
-      			<td><input class="form-control" ng-model="transactionFrom"></td>
-      			<td><input class="form-control" ng-model="transactionTo"></td>
-      		</tr>
-      	</table>
+	<div class="row" ng-show="selectedTransaction.title == 'Send Money'" style="margin-left:10px;">
+		<div class="input-group input-group-sm">
+			<form name="SendMoney">
+			    <div class="form-group">
+			    	<label for="title">Contribution Amount</label>
+			   		<div class="input-group">
+				      	<div class="input-group-addon">$</div>
+				      	<input type="number" ng-model="transactionToExecute.contributionAmount" class="form-control" id="contributionAmount" placeholder="Amount">
+				    </div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="title">Recipient of Funds</label>
+				    <input class="form-control" ng-model="transactionToExecute.recipient" uib-typeahead="user.name for user in users">
+			  	</div>
+			  	<button type="submit" class="btn btn-default" style="margin-top:10px;">Submit</button>
+			</form>
+		</div>
 	</div>
-    <div class="">
-    	<input type="number" class="form-control col-sm-9" ng-model="transactionAmount">
-    </div>
-   	<div class="">
-    	<button type="button" class="btn btn-primary" ng-click="sendTransaction()">Send Transaction</button>  
-    </div>
 </div>
