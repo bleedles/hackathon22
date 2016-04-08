@@ -1,15 +1,15 @@
 ;(function() {
-	var app = angular.module("app", ['ethereum-service']);
+	var app = angular.module("app", ['ethereum-service', 'accountService']);
 	
 	app.controller("AppController", AppController);
 	app.directive('dashboardView', dashboardView);
 	app.directive('transactionsView', transactionsView);
 	
-	function AppController($scope, ethereum) {
+	function AppController($scope, ethereum, accountInfo) {
 		var vm = this;
 	    activate();
 	    
-	    $scope.users = ["Blake", "Connor", "Jon", "Afif"];
+	  $scope.users = ["Blake", "Connor", "Jon", "Afif"];
 		$scope.web3 = ethereum.web3;
 		$scope.selectAccount = selectAccount;
 		$scope.sendTransaction = sendTransaction;
