@@ -56,9 +56,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 <script src="js/lib/angular.js"></script>
 <script src="js/lib/angular-ui.js"></script>
-<!-- <script src="js/lib/require.js"></script> -->
 <script src="js/lib/web3/web3.min.js"></script>
 <script src="js/ethereum-service.js"></script>
 <script src="js/accountService.js"></script>
+<script src="js/contractFactory.js"></script>
 <script src="js/app.js"></script>
 </html>
