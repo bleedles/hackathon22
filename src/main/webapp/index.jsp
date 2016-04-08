@@ -60,5 +60,6 @@
 <script src="js/lib/web3/web3.min.js"></script>
 <script src="js/ethereum-service.js"></script>
 <script src="js/accountService.js"></script>
+<script src="js/contractFactory.js"></script>
 <script src="js/app.js"></script>
 </html>
