@@ -1,5 +1,5 @@
 ;(function() {
-	var app = angular.module("app", ['ethereum-service', 'accountService', 'contractFactory']);
+	var app = angular.module("app", ['ethereum-service', 'accountService', 'contractFactory', 'ui.bootstrap']);
 
 	app.controller("AppController", AppController);
 	app.directive('dashboardView', dashboardView);
@@ -10,7 +10,7 @@
 	    activate();
 	    $scope.contracts = contracts;
 	    $scope.users = 
-	    [{name:"blake",
+	    [{name:"Blake",
 	    classicCoins:0,
 	    customerKey: "518603",
     	accountBalanceData: 
@@ -162,7 +162,8 @@
 		$scope.selectAccount = selectAccount;
 		$scope.sendTransaction = sendTransaction;
 		$scope.activePage = 'dashboard';
-		
+		$scope.transactions = [{title: 'Send Money'},{title: 'Fund Me'},{title: 'Group Fund'}];
+		$scope.transactionToExecute = {};
 	    ///////////////////
 
 	    function activate() {
