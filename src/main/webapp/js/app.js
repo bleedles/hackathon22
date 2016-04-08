@@ -5,11 +5,11 @@
     app.directive('dashboardView', dashboardView);
     app.directive('transactionsView', transactionsView);
     
-    function AppController($scope, ethereum, accountInfo, contracts) {
+    function AppController($scope, $rootScope, ethereum, accountInfo, contracts) {
         var vm = this;
         activate();
         $scope.contracts = contracts;
-        $scope.users = 
+        $rootScope.users = 
         [{name:"Blake",
         classicCoins:0,
         customerKey: "518603",
@@ -20,152 +20,53 @@
             availableBalance: 2123.29,
             accountBalance: 2123.29,
             accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "392316",
-            accountDescription:  "Virtual Wallet Reserve Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 921.53,
-            accountBalance: 921.53,
-            accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "895910",
-            accountDescription:  "Virtual Wallet Growth Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 10623.31,
-            accountBalance: 10623.31,
-            accountType:  "savings",
-            vwId:  "513989"},
-            {accountNumber:  "1906624",
-            accountDescription:  "PNC Points Visa Credit Card Account",
-            accountNickname:  "My Credit Card",
-            availableBalance: 3298.83,
-            accountBalance: 3298.83,
-            accountType:  "credit card"},
-            {accountNumber:  "1807628",
-            accountDescription:  "PNC Visa Signature Credit Card Account",
-            accountNickname:  "My 2nd Credit Card",
-            availableBalance: 5194.21,
-            accountBalance: 5194.21,
-            accountType:  "credit card"}]},
+            vwId:  "513989"}]},
          {name:"Connor",
          classicCoins:0,
          customerKey:"450574",
          accountBalanceData: 
-            [{accountNumber:  "511698",
-            accountDescription:  "Virtual Wallet Spend Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 2123.29,
-            accountBalance: 2123.29,
-            accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "392316",
+            [{accountNumber:  "392316",
             accountDescription:  "Virtual Wallet Reserve Account",
             accountNickname:  "My VW Account",
             availableBalance: 921.53,
             accountBalance: 921.53,
             accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "895910",
-            accountDescription:  "Virtual Wallet Growth Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 10623.31,
-            accountBalance: 10623.31,
-            accountType:  "savings",
-            vwId:  "513989"},
-            {accountNumber:  "1906624",
-            accountDescription:  "PNC Points Visa Credit Card Account",
-            accountNickname:  "My Credit Card",
-            availableBalance: 3298.83,
-            accountBalance: 3298.83,
-            accountType:  "credit card"},
-            {accountNumber:  "1807628",
-            accountDescription:  "PNC Visa Signature Credit Card Account",
-            accountNickname:  "My 2nd Credit Card",
-            availableBalance: 5194.21,
-            accountBalance: 5194.21,
-            accountType:  "credit card"}]},
+            vwId:  "513989"}]},
          {name:"Jon",
          classicCoins:0,
          customerKey:"909913",
          accountBalanceData: 
-            [{accountNumber:  "511698",
-            accountDescription:  "Virtual Wallet Spend Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 2123.29,
-            accountBalance: 2123.29,
-            accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "392316",
-            accountDescription:  "Virtual Wallet Reserve Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 921.53,
-            accountBalance: 921.53,
-            accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "895910",
+            [{accountNumber:  "895910",
             accountDescription:  "Virtual Wallet Growth Account",
             accountNickname:  "My VW Account",
             availableBalance: 10623.31,
             accountBalance: 10623.31,
             accountType:  "savings",
-            vwId:  "513989"},
-            {accountNumber:  "1906624",
-            accountDescription:  "PNC Points Visa Credit Card Account",
-            accountNickname:  "My Credit Card",
-            availableBalance: 3298.83,
-            accountBalance: 3298.83,
-            accountType:  "credit card"},
-            {accountNumber:  "1807628",
-            accountDescription:  "PNC Visa Signature Credit Card Account",
-            accountNickname:  "My 2nd Credit Card",
-            availableBalance: 5194.21,
-            accountBalance: 5194.21,
-            accountType:  "credit card"}]},
+            vwId:  "513989"}]},
          {name: "Afif",
          classicCoins:0,
          customerKey:"951862",
          accountBalanceData: 
-            [{accountNumber:  "511698",
-            accountDescription:  "Virtual Wallet Spend Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 2123.29,
-            accountBalance: 2123.29,
-            accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "392316",
-            accountDescription:  "Virtual Wallet Reserve Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 921.53,
-            accountBalance: 921.53,
-            accountType:  "deposit",
-            vwId:  "513989"},
-            {accountNumber:  "895910",
-            accountDescription:  "Virtual Wallet Growth Account",
-            accountNickname:  "My VW Account",
-            availableBalance: 10623.31,
-            accountBalance: 10623.31,
-            accountType:  "savings",
-            vwId:  "513989"},
-            {accountNumber:  "1906624",
+            [{accountNumber:  "1906624",
             accountDescription:  "PNC Points Visa Credit Card Account",
             accountNickname:  "My Credit Card",
             availableBalance: 3298.83,
             accountBalance: 3298.83,
-            accountType:  "credit card"},
-            {accountNumber:  "1807628",
-            accountDescription:  "PNC Visa Signature Credit Card Account",
-            accountNickname:  "My 2nd Credit Card",
-            availableBalance: 5194.21,
-            accountBalance: 5194.21,
             accountType:  "credit card"}]}];
-        $scope.activeUser = $scope.users[0];
+        $scope.activeUser = $rootScope.users[0];
+        $scope.otherUsers = [];
+        $scope.otherUsers.push($rootScope.users[1]);
+        $scope.otherUsers.push($rootScope.users[2]);
+        $scope.otherUsers.push($rootScope.users[3]);
         $scope.web3 = ethereum.web3;
         $scope.selectAccount = selectAccount;
         $scope.sendTransaction = sendTransaction;
         $scope.activePage = 'dashboard';
-        $scope.transactions = [{title: 'Send Money'},{title: 'Fund Me'},{title: 'Group Fund'}];
-        $scope.transactionToExecute = {};
+        $scope.transactions = [{type: 'Send Money'},{type: 'Fund Me'},{type: 'Group Fund'}];
+        $scope.activeUser.transactionToExecute = {};
         $scope.setActiveUser = setActiveUser;
+        $scope.setRecipient = setRecipient;
+        $scope.selectTransaction = selectTransaction;
         ///////////////////
 
         function activate() {
@@ -204,21 +105,58 @@
         }
         
         function sendTransaction() {
-            $scope.transactionSuccess = false;
-            $scope.transactionSuccess = ethereum.web3.eth.sendTransaction({
-                from:$scope.transactionFrom.trim(), 
-                to:$scope.transactionTo.trim(),
-                gas:0.25,
-                value:ethereum.web3.toWei($scope.transactionAmount, "ether")
-                });
-            return $scope.transactionSuccess;
+            if($scope.activeUser.transactionToExecute) {
+                var trans = $scope.activeUser.transactionToExecute;
+                trans.deadline = parseInt(trans.deadline * 60000);
+                switch($scope.activeUser.transactionToExecute.type) {
+                case 'Send Money':
+                    if(parseFloat($scope.activeUser.accountBalanceData[0].availableBalance) < parseFloat($scope.activeUser.transactionToExecute.contributionAmount)) {
+                        alert("You don't have enough money to transfer!");
+                    } else {
+                        contracts.sendMoney($scope.activeUser.transactionToExecute.recipient.name, $scope.activeUser.transactionToExecute.contributionAmount, $scope.activeUser.name);
+                        $scope.activeUser.transactionToExecute = {type:$scope.activeUser.transactionToExecute.type};
+                    }
+                    break;
+                case 'Fund Me':
+                    contracts.createFundMe($scope.activeUser.transactionToExecute.title, $scope.activeUser.transactionToExecute.targetAmount, $scope.activeUser.transactionToExecute.deadline, $scope.activeUser.transactionToExecute.contributionAmount, $scope.activeUser.transactionToExecute.recipient.name);
+                    $scope.activeUser.transactionToExecute = {type:$scope.activeUser.transactionToExecute.type};
+                    break;
+                case 'Group Fund':
+                    if(parseFloat($scope.activeUser.accountBalanceData[0].availableBalance) < parseFloat($scope.activeUser.transactionToExecute.contributionAmount)) {
+                        alert("You don't have enough money to transfer!");
+                    } else {
+                        contracts.createGroupFund($scope.activeUser.transactionToExecute.title, $scope.activeUser.transactionToExecute.deadline, $scope.activeUser.transactionToExecute.contributionAmount, $scope.activeUser.name);
+                        $scope.activeUser.transactionToExecute = {type:$scope.activeUser.transactionToExecute.type};
+                    }
+                    break;
+                }
+            }
+        }
+        
+        function selectTransaction() {
+            $scope.activeUser.transactionToExecute = angular.copy($scope.selectedTransaction);
         }
         
         function getAccountBalance(account) {
             return ethereum.web3.fromWei(ethereum.web3.eth.getBalance(account), 'ether');
         }
         
+        function setRecipient() {
+            for(var i in $scope.users) {
+                if($scope.users[i].name.toLowerCase() == $scope.activeUser.recipient.toLowerCase()) {
+                    $scope.activeUser.transactionToExecute.recipient = $rootScope.users[i];
+                    break;
+                }
+            }
+        }
+        
         function setActiveUser(user) {
+            $scope.otherUsers = [];
+            for(var i in $rootScope.users) {
+                if($rootScope.users[i].name != user.name) {
+                    $scope.otherUsers.push($rootScope.users[i]);
+                }
+            }
             $scope.activeUser = user;
         }
         
