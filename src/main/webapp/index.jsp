@@ -24,14 +24,15 @@
 	        	</div>
 	        	<div id="navbar" class="navbar-collapse collapse">
 		          	<ul class="nav navbar-nav navbar-right">
-		            	<li><a href="#">Dashboard</a></li>
-		            	<li><a href="#">Settings</a></li>
-		            	<li><a href="#">Profile</a></li>
+		            	<li><a ng-click="activePage = 'dashboard'" href="">Dashboard</a></li>
+		            	<li class="dropdown">
+				        	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{activeUser.name}} <span class="caret"></span></a>
+				          	<ul class="dropdown-menu">
+				            	<li ng-repeat="user in users"><a ng-click="setActiveUser(user)" href="">{{user.name}}</a></li>
+				          	</ul>
+				        </li>
 		            	<li><a href="#">Help</a></li>
 		          	</ul>
-		          	<form class="navbar-form navbar-right">
-		            	<input type="text" class="form-control" placeholder="Search...">
-		          	</form>
 				</div>
 	      	</div>
 	    </nav>
@@ -58,8 +59,8 @@
 <script src="js/lib/angular-animate.min.js"></script>
 <script src="js/lib/angular-ui.js"></script>
 <script src="js/lib/web3/web3.min.js"></script>
-<script src="js/ethereum-service.js"></script>
 <script src="js/accountService.js"></script>
 <script src="js/contractFactory.js"></script>
+<script src="js/ethereum-service.js"></script>
 <script src="js/app.js"></script>
 </html>
