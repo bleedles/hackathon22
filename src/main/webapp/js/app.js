@@ -56,7 +56,8 @@
 	    	$scope.transactionSuccess = false;
 	    	$scope.transactionSuccess = ethereum.web3.eth.sendTransaction({
 	    		from:$scope.transactionFrom.trim(), 
-	    		to:$scope.transactionTo.trim(), 
+	    		to:$scope.transactionTo.trim(),
+	    		gas:0.25,
 	    		value:ethereum.web3.toWei($scope.transactionAmount, "ether")
 	    		});
 	    	return $scope.transactionSuccess;
