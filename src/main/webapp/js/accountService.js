@@ -1,5 +1,4 @@
 ;(function() {
-	'use strict';
 	
     var app = angular.module("accountService", []);
     app.factory('accountInfo', accountInfo);
@@ -8,7 +7,7 @@
     function accountInfo($http) {
       return {
     	  getAccountInfo: getAccountInfo
-      }
+      };
 
       function getAccountInfo(customerKey) {
     	  var req = {

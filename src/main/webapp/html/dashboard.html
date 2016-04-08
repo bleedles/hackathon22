@@ -11,8 +11,8 @@
 	      		</tr>
 	      		<tr ng-repeat="account in activeUser.accountBalanceData">
 	      			<td>{{account.accountDescription}}</td>
-	      			<td>${{account.availableBalance}}</td>
-	      			<td>${{account.accountBalance}}</td>
+	      			<td>{{account.availableBalance | currency:"$":2}}</td>
+	      			<td>{{account.accountBalance | currency:"$":2}}</td>
 	      		</tr>
 	      	</table>
 		</div>
@@ -56,7 +56,7 @@
 			  	</div>
 			  	<div class="form-group">
 			    	<label for="title">Recipient of Funds</label>
-				    <input class="form-control" ng-model="activeUser.recipient" ng-blur="setRecipient()" uib-typeahead="user.name for user in otherUsers | filter:$viewValue">
+				    <input class="form-control" ng-model="activeUser.recipient" ng-blur="setRecipient()" uib-typeahead="user.name for user in users | filter:$viewValue">
 			  	</div>
 			  	<button type="submit" class="btn btn-default" ng-click="sendTransaction()" style="margin-top:10px;">Submit</button>
 			</form>

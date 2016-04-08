@@ -1,77 +1,75 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="ContractController as ContractCtrl">
-  <div class="row" ng-show="activePage == 'group voting'">
-    <div class="form-group">
-        <label for="title">Contribution Amount</label>
-        <input class="form-control" ng-model="transactionToExecute.recipient" uib-typeahead="account.address for account in accounts">
-      </div>
-  </div>
-  <h2 class="sub-header">Actionable Contracts</h2>
+	<h1>{{activeUser.name + "'s"}} Contracts</h1>
+	<h3 class="">Actionable Contracts</h3>
     <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Current Amount</th>
-            <th>Target Amount</th>
-            <th>Recipient</th>
-            <th>Deadline</th>
-            <th>Status</th>
-          </tr>
-          <tr ng-repeat="contract in actionable">
-            <td>contract.title</td>
-            <td>contract.type</td>
-            <td>contract.currentAmount</td>
-            <td>contract.targetAmount</td>
-            <td>contract.recipient</td>
-            <td>contract.deadline</td>
-            <td>contract.status</td>
-          </tr>
-        </table>
-  </div>
-    <h2 class="sub-header">Pending Contracts</h2>
+      	<table class="table">
+      		<tr>
+      			<th>Title</th>
+      			<th>Type</th>
+      			<th>Current Amount</th>
+      			<th>Target Amount</th>
+      			<th>Recipient</th>
+      			<th>Action</th>
+      			<th>Status</th>
+      		</tr>
+      		<tr ng-repeat="contract in contracts.getActionableContracts(activeUser.name) track by $index">
+      			<td>{{contract.title}}</td>
+      			<td>{{contract.type}}</td>
+      			<td>{{contract.currentAmount | currency:"$":2}}</td>
+      			<td>{{contract.targetAmount | currency:"$":2}}</td>
+      			<td>{{contract.recipient}}</td>
+      			<td>
+      				<button type="button" class="btn btn-default" ng-if="contract.status == 'pending'" ng-click="contracts.addMoney(contract.id, activeUser.name, contract.contributionAmount)">Contribute</button>
+      				<button type="button" class="btn btn-default" ng-if="contract.status == 'voting'" ng-click="open(contract)">Vote</button>
+      			</td>
+      			<td>{{contract.status}}</td>
+      		</tr>
+      	</table>
+	</div>
+    <h3 class="">Pending Contracts</h3>
     <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Current Amount</th>
-            <th>Target Amount</th>
-            <th>Recipient</th>
-            <th>Deadline</th>
-            <th>Status</th>
-          </tr>
-          <tr ng-repeat="contract in pending">
-            <td>contract.title</td>
-            <td>contract.type</td>
-            <td>contract.currentAmount</td>
-            <td>contract.targetAmount</td>
-            <td>contract.recipient</td>
-            <td>contract.deadline</td>
-            <td>contract.status</td>
-          </tr>
-        </table>
-  </div>
-  <h2 class="sub-header">Completed Contracts</h2>
+      	<table class="table">
+      		<tr>
+      			<th>Title</th>
+      			<th>Type</th>
+      			<th>Current Amount</th>
+      			<th>Target Amount</th>
+      			<th>Recipient</th>
+<!--       			<th>Action</th> -->
+      			<th>Status</th>
+      		</tr>
+      		<tr ng-repeat="contract in contracts.getPendingContracts(activeUser.name) track by $index">
+      			<td>{{contract.title}}</td>
+      			<td>{{contract.type}}</td>
+      			<td>{{contract.currentAmount | currency:"$":2}}</td>
+      			<td>{{contract.targetAmount | currency:"$":2}}</td>
+      			<td>{{contract.recipient}}</td>
+<!--       			<td></td> -->
+      			<td>{{contract.status}}</td>
+      		</tr>
+      	</table>
+	</div>
+	<h3 class="">Completed Contracts</h3>
     <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Current Amount</th>
-            <th>Target Amount</th>
-            <th>Recipient</th>
-            <th>Deadline</th>
-            <th>Status</th>
-          </tr>
-          <tr ng-repeat="contract in completed">
-            <td>contract.title</td>
-            <td>contract.type</td>
-            <td>contract.currentAmount</td>
-            <td>contract.targetAmount</td>
-            <td>contract.recipient</td>
-            <td>contract.deadline</td>
-            <td>contract.status</td>
-          </tr>
-        </table>
-  </div>
+      	<table class="table">
+      		<tr>
+      			<th>Title</th>
+      			<th>Type</th>
+      			<th>Current Amount</th>
+      			<th>Target Amount</th>
+      			<th>Recipient</th>
+<!--       			<th>Action</th> -->
+      			<th>Status</th>
+      		</tr>
+      		<tr ng-repeat="contract in contracts.getCompletedContracts(activeUser.name) track by $index">
+      			<td>{{contract.title}}</td>
+      			<td>{{contract.type}}</td>
+      			<td>{{contract.currentAmount | currency:"$":2}}</td>
+      			<td>{{contract.targetAmount | currency:"$":2}}</td>
+      			<td>{{contract.recipient}}</td>
+<!--       			<td>{{contract.deadline}}</td> -->
+      			<td>{{contract.status}}</td>
+      		</tr>
+      	</table>
+	</div>
 </div>

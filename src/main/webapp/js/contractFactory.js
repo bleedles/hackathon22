@@ -52,25 +52,25 @@
     	}
     	
 		function getActionableContracts(userName) {
-			var contracts = getUserContracts(userName);
+			var contracts = ai.contracts;
     		var outgoingContracts = [];
     		for(var i = 0; i < contracts.length; i++) {
-    			var people = contracts[i].actionNeeded;
+    			var people = contracts[i].actionRequired;
     			if(contracts[i].status != "completed") {
-    				if(contracts[i].type == "groupFund") {
+    				if(contracts[i].type == "Group Fund") {
     					if(contracts[i].status == "voting") {
         					people = contracts[i].voters;
-        					for(var j = 0; j < voters.length; j++) {
-        						if(voters[j].name == userName) {
+        					for(var j = 0; j < people.length; j++) {
+        						if(people[j] == userName) {
         							outgoingContracts.push(contracts[i]);
         						}
         					}
-    					}else {
+    					} else {
     						var alreadyFunded = false;
     						var funders = contracts[i].funders;
     						for(var j = 0; j < funders.length; j++) {
-    							if(funders[j].name == name) {
-    								alreadyPaid = true;
+    							if(funders[j].name == userName) {
+    								alreadyFunded = true;
     							}
     						}
     						if(!alreadyFunded) {
@@ -103,11 +103,12 @@
 		function createFundMe(title, targetAmount, deadline, contributionAmount, recipient) {
 			var timeoutPromise = $timeout(timeoutFundMe, deadline, true, ai.contracts.length);
 			var contract = {
-				type: "fundMe",
+				type: "Fund Me",
 				id: ai.contracts.length,
 				targetAmount: targetAmount,
 				title: title,
 				currentAmount: 0,
+				contributionAmount: contributionAmount,
 				recipient: recipient,
 				people: [recipient],
 				deadline: timeoutPromise,
@@ -121,33 +122,34 @@
 			var users = $rootScope.users;
 			for(var i = 0; i < users.length; i++) {
 				if(users[i].name == user) {
-					var user = users[i];
-					var account = user.accountBalanceData[0];
-					if(account.availableBalance < amount) {
+					var userObj = users[i];
+					var account = userObj.accountBalanceData[0];
+					if(account.availableBalance < contributionAmount) {
 						return false;
 					}else {
-						account.availableBalance -= amount;
+						account.availableBalance -= contributionAmount;
 					}
 				}
 			}
 			var timeoutPromise = $timeout(timeoutGroupFund, deadline, true, ai.contracts.length);
 			var contract = {
-				type: "groupFund",
+				type: "Group Fund",
 				id: ai.contracts.length,
 				title: title,
 				currentAmount: contributionAmount,
+				contributionAmount: contributionAmount,
 				funders: [{name: user, amount: contributionAmount}],
 				voters: [user],
 				people: [user],
 				deadline: timeoutPromise,
 				status: "pending"
-			}
+			};
 			ai.contracts.push(contract);
 			return true;
 		}
 		
 		function timeoutFundMe(index) {
-			var contract = ai.contracts[i];
+			var contract = ai.contracts[index];
 			contract.status = "completed";
 			var funders = contract.funders;
 			if(funders && funders.length > 0) {
@@ -162,29 +164,51 @@
 		}
 		
 		function addMoney(index, name, amount) {
-			var contract = ai.contracts[i];
+			var contract = ai.contracts[index];
+			if(!contract.funders) {
+				contract.funders = [];
+			}
+			if(!contract.people) {
+				contract.people = [];
+			}
+			var people = contract.people;
 			var funders = contract.funders;
+			var users = $rootScope.users;
+			for(var i = 0; i < users.length; i++) {
+				if(users[i].name == name) {
+					var user = users[i];
+					var account = user.accountBalanceData[0];
+					if(account.availableBalance < amount) {
+						return false;
+					}else {
+						account.availableBalance -= amount;
+					}
+				}
+			}
 			if(contract.status == "completed") {
 				return false;
 			}else {
-				var users = $rootScope.users;
-				for(var i = 0; i < users.length; i++) {
-					if(users[i].name == name) {
-						var user = users[i];
-						var account = user.accountBalanceData[0];
-						if(account.availableBalance < amount) {
-							return false;
-						}else {
-							account.availableBalance -= amount;
+				if(contract.type == "Fund Me") {
+					var alreadyPaid = false;
+					for(var i = 0; i < funders.length; i++) {
+						if(funders[i].name == name) {
+							alreadyPaid = true;
+							funders[i].amount += amount;
 						}
 					}
-				}
-				if(!contract.people) {
-					contract.people = [];
-				}
-				contract.people.push(name);
-				if(contract.type == "fundMe") {
-					funders.push({name: name, amount: amount});
+					
+					if(!alreadyPaid) {
+						funders.push({name: name, amount: amount});
+						var inPeople = false;
+						for(var i = 0; i < people.length; i++) {
+							if(people[i] == name) {
+								inPeople = true;
+							}
+						}
+						if(!inPeople) {
+							contract.people.push(name);
+						}
+					}
 					contract.currentAmount += amount;
 					if(contract.currentAmount >= contract.targetAmount) {
 						contract.status = "completed";
@@ -204,8 +228,9 @@
 					if(alreadyPaid) {
 						return false;
 					}else {
-						voters.push(name);
+						contract.voters.push(name);
 						funders.push({name: name, amount: amount});
+						contract.people.push(name);
 						contract.currentAmount += amount;
 						return true;
 					}
@@ -239,7 +264,7 @@
 		}
 		
 		function timeoutGroupFund(index) {
-			var contract = ai.contracts[i];
+			var contract = ai.contracts[index];
 			contract.status = "voting";
 			contract.actionRequired = [];
 			var voters = contract.voters;
@@ -249,16 +274,19 @@
 		}
 		
 		function vote(index, name, vote) {
-			var contract = ai.contracts[i];
+			var contract = ai.contracts[index];
 			var complete = false;
 			var alreadyVoted = false;
+			if(!contract.votes) {
+				contract.votes = [];
+			}
 			var votes = contract.votes;
 			var voters = contract.voters;
 			if(contract.status != "completed") {
 				if(votes) {
 					for(var i = 0; i < votes.length; i++) {
-						if(votes.name = name) {
-							votes.vote = vote;
+						if(votes[i].name == name) {
+							votes[i].vote = vote;
 							alreadyVoted = true;
 						}
 					}
@@ -275,7 +303,7 @@
 						}
 					}
 					if(agreed) {
-						status = "completed";
+						contract.status = "completed";
 						sendMoney(votedPerson, contract.currentAmount);
 					}
 				}
