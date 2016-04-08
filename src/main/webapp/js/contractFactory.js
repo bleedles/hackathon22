@@ -22,7 +22,6 @@
     	}
     	
     	function getUserContracts(userName) {
-    		var contracts = getUserContracts(userName);
     		var outgoingContracts = [];
     		for(var i = 0; i < contracts.length; i++) {
     			var people = contracts[i].people;
