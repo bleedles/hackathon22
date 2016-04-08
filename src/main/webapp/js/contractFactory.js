@@ -22,7 +22,7 @@
     	}
     	
     	function getUserContracts(userName) {
-    		var contracts = getUserContracts(userName);
+    		var contracts = ai.contracts;
     		var outgoingContracts = [];
     		for(var i = 0; i < contracts.length; i++) {
     			var people = contracts[i].people;
@@ -32,6 +32,7 @@
     				}
     			}
     		}
+    		return outgoingContracts;
     	}
     	
     	function getPendingContracts(userName) {
@@ -47,6 +48,7 @@
 	    			}
     			}
     		}
+    		return outgoingContracts;
     	}
     	
 		function getActionableContracts(userName) {
@@ -80,6 +82,7 @@
     				}
     			}
     		}
+    		return outgoingContracts;
 		}
 		
 		function getCompletedContracts(userName) {
@@ -90,6 +93,7 @@
 	    			outgoingContracts.push(contracts[i]);
 	    		}
     		}
+    		return outgoingContracts;
 		}
 		
 		function addContract(contract) {

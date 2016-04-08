@@ -2,6 +2,7 @@
     var app = angular.module("app", ['ethereum-service', 'accountService', 'contractFactory', 'ui.bootstrap']);
 
     app.controller("AppController", AppController);
+    app.controller("ContractController", ContractController);
     app.directive('dashboardView', dashboardView);
     app.directive('transactionsView', transactionsView);
     
@@ -167,6 +168,12 @@
                 }
             }
         }
+    }
+    
+    function ContractController($scope, $rootScope, contracts) {
+        $scope.actionable = contracts.getActionableContracts($scope.activeUser.name);
+        $scope.pending = contracts.getPendingContracts($scope.activeUser.name);
+        $scope.completed = contracts.getCompletedContracts($scope.activeUser.name);
     }
     
     function dashboardView() {
