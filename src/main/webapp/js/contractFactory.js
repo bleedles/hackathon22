@@ -114,22 +114,36 @@
 				status: "pending"
 			}
 			ai.contracts.push(contract);
+			return true;
 		}
 		
 		function createGroupFund(title, deadline, contributionAmount, user) {
+			var users = $rootScope.users;
+			for(var i = 0; i < users.length; i++) {
+				if(users[i].name == user) {
+					var user = users[i];
+					var account = user.accountBalanceData[0];
+					if(account.availableBalance < amount) {
+						return false;
+					}else {
+						account.availableBalance -= amount;
+					}
+				}
+			}
 			var timeoutPromise = $timeout(timeoutGroupFund, deadline, true, ai.contracts.length);
 			var contract = {
 				type: "groupFund",
 				id: ai.contracts.length,
 				title: title,
 				currentAmount: contributionAmount,
-				recipient: recipient,
 				funders: [{name: user, amount: contributionAmount}],
-				voters: [name],
+				voters: [user],
+				people: [user],
 				deadline: timeoutPromise,
 				status: "pending"
 			}
 			ai.contracts.push(contract);
+			return true;
 		}
 		
 		function timeoutFundMe(index) {
@@ -150,21 +164,25 @@
 		function addMoney(index, name, amount) {
 			var contract = ai.contracts[i];
 			var funders = contract.funders;
-			var users = $rootScope.users;
-			for(var i = 0; i < users.length; i++) {
-				if(users[i].name == name) {
-					var user = users[i];
-					var account = user.accountBalanceData[0];
-					if(account.availableBalance < amount) {
-						return false;
-					}else {
-						account.availableBalance -= amount;
-					}
-				}
-			}
 			if(contract.status == "completed") {
 				return false;
 			}else {
+				var users = $rootScope.users;
+				for(var i = 0; i < users.length; i++) {
+					if(users[i].name == name) {
+						var user = users[i];
+						var account = user.accountBalanceData[0];
+						if(account.availableBalance < amount) {
+							return false;
+						}else {
+							account.availableBalance -= amount;
+						}
+					}
+				}
+				if(!contract.people) {
+					contract.people = [];
+				}
+				contract.people.push(name);
 				if(contract.type == "fundMe") {
 					funders.push({name: name, amount: amount});
 					contract.currentAmount += amount;
