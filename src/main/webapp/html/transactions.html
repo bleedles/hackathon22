@@ -1,5 +1,22 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="ContractController as ContractCtrl">
 	<h1>{{activeUser.name + "'s"}} Contracts</h1>
+	
+	<h2 class="">Accounts</h2>
+    <div class="table-responsive">
+      	<table class="table">
+      		<tr>
+      			<th>Account Desc</th>
+      			<th>Available Balance</th>
+      			<th>Account Balance</th>
+      		</tr>
+      		<tr ng-repeat="account in activeUser.accountBalanceData">
+      			<td>{{account.accountDescription}}</td>
+      			<td>{{account.availableBalance | currency:"$":2}}</td>
+      			<td>{{account.accountBalance | currency:"$":2}}</td>
+      		</tr>
+      	</table>
+	</div>
+
 	<h3 class="">Actionable Contracts</h3>
     <div class="table-responsive">
       	<table class="table">
