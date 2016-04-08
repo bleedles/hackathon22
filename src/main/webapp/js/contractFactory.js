@@ -5,7 +5,7 @@
     app.factory('contracts', contracts);
     
     /* @ngInject */
-    function contracts($timeout) {
+    function contracts($timeout, $rootScope) {
     	var ai = this;
     	ai.contracts = [];
     	
@@ -17,7 +17,8 @@
     		createFundMe: createFundMe,
     		createGroupFund: createGroupFund,
     		addMoney: addMoney,
-    		vote: vote
+    		vote: vote,
+    		sendMoney: sendMoney
     	}
     	
     	function getUserContracts(userName) {
@@ -54,14 +55,28 @@
     		for(var i = 0; i < contracts.length; i++) {
     			var people = contracts[i].actionNeeded;
     			if(contracts[i].status != "completed") {
-    				if(!contracts[i].requestedFunders || contracts[i].requestedFunders.length == 0) {
-    					outgoingContracts.push(contracts[i]);
+    				if(contracts[i].type == "groupFund") {
+    					if(contracts[i].status == "voting") {
+        					people = contracts[i].voters;
+        					for(var j = 0; j < voters.length; j++) {
+        						if(voters[j].name == userName) {
+        							outgoingContracts.push(contracts[i]);
+        						}
+        					}
+    					}else {
+    						var alreadyFunded = false;
+    						var funders = contracts[i].funders;
+    						for(var j = 0; j < funders.length; j++) {
+    							if(funders[j].name == name) {
+    								alreadyPaid = true;
+    							}
+    						}
+    						if(!alreadyFunded) {
+    							outgoingContracts.push(contracts[i]);
+    						}
+    					}    					
     				}else {
-    					for(var j = 0; j < people.length; j++) {
-            				if(people[j] == userName) {
-            					outgoingContracts.push(contracts[i]);
-            				}
-            			}
+            			outgoingContracts.push(contracts[i]);
     				}
     			}
     		}
@@ -94,20 +109,23 @@
 				deadline: timeoutPromise,
 				status: "pending"
 			}
+			ai.contracts.push(contract);
 		}
 		
 		function createGroupFund(title, deadline, contributionAmount, user) {
 			var timeoutPromise = $timeout(timeoutGroupFund, deadline, true, ai.contracts.length);
 			var contract = {
-				type: "fundMe",
+				type: "groupFund",
 				id: ai.contracts.length,
 				title: title,
 				currentAmount: contributionAmount,
 				recipient: recipient,
 				funders: [{name: user, amount: contributionAmount}],
+				voters: [name],
 				deadline: timeoutPromise,
 				status: "pending"
 			}
+			ai.contracts.push(contract);
 		}
 		
 		function timeoutFundMe(index) {
@@ -120,6 +138,7 @@
 					// send money back
 					// funder.name
 					// funder.amount
+					sendMoney(funder.name, funder.amount);
 				}
 			}
 		}
@@ -127,28 +146,118 @@
 		function addMoney(index, name, amount) {
 			var contract = ai.contracts[i];
 			var funders = contract.funders;
+			var users = $rootScope.users;
+			for(var i = 0; i < users.length; i++) {
+				if(users[i].name == name) {
+					var user = users[i];
+					var account = user.accountBalanceData[0];
+					if(account.availableBalance < amount) {
+						return false;
+					}else {
+						account.availableBalance -= amount;
+					}
+				}
+			}
 			if(contract.status == "completed") {
 				return false;
 			}else {
-				funders.push({name: name, amount: amount});
-				contract.currentAmount += amount;
 				if(contract.type == "fundMe") {
+					funders.push({name: name, amount: amount});
+					contract.currentAmount += amount;
 					if(contract.currentAmount >= contract.targetAmount) {
 						contract.status = "completed";
 						// send money to recipient
 						// contract.recipient
 						// contract.currentAmount
+						sendMoney(contract.recipient, contract.currentAmount);
+					}
+					return true;
+				}else {
+					var alreadyPaid = false;
+					for(var i = 0; i < funders.length; i++) {
+						if(funders[i].name == name) {
+							alreadyPaid = true;
+						}
+					}
+					if(alreadyPaid) {
+						return false;
+					}else {
+						voters.push(name);
+						funders.push({name: name, amount: amount});
+						contract.currentAmount += amount;
+						return true;
 					}
 				}
 			}
 		}
 		
+		function sendMoney(name, amount, from) {
+			if(from) {
+				var users = $rootScope.users;
+				for(var i = 0; i < users.length; i++) {
+					if(users[i].name == from) {
+						var user = users[i];
+						var account = user.accountBalanceData[0];
+						if(account.availableBalance < amount) {
+							return false;
+						}else {
+							account.availableBalance -= amount;
+						}
+					}
+				}
+			}
+			var users = $rootScope.users;
+			for(var i = 0; i < users.length; i++) {
+				if(users[i].name == name) {
+					var user = users[i];
+					var account = user.accountBalanceData[0];
+					account.availableBalance += amount;
+				}
+			}
+		}
+		
 		function timeoutGroupFund(index) {
-			
+			var contract = ai.contracts[i];
+			contract.status = "voting";
+			contract.actionRequired = [];
+			var voters = contract.voters;
+			for(var i = 0; i < voters.length; i++) {
+				contract.actionRequired.push(voters[i]);
+			}
 		}
 		
 		function vote(index, name, vote) {
-			
+			var contract = ai.contracts[i];
+			var complete = false;
+			var alreadyVoted = false;
+			var votes = contract.votes;
+			var voters = contract.voters;
+			if(contract.status != "completed") {
+				if(votes) {
+					for(var i = 0; i < votes.length; i++) {
+						if(votes.name = name) {
+							votes.vote = vote;
+							alreadyVoted = true;
+						}
+					}
+				}
+				if(!alreadyVoted) {
+					votes.push({name: name, vote: vote});
+				}
+				if(votes.length == voters.length) {
+					var votedPerson = votes[0].vote;
+					var agreed = true;
+					for(var i = 0; i < votes.length; i++) {
+						if(votedPerson != votes[i].vote) {
+							agreed = false;
+						}
+					}
+					if(agreed) {
+						status = "completed";
+						sendMoney(votedPerson, contract.currentAmount);
+					}
+				}
+			}
 		}
     }
 })();
